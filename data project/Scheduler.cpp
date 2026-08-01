@@ -1,4 +1,12 @@
 #include"Scheduler.h"
+void schedular::sim() {
+	int curr = 1;
+	while (true) {
+		updocst(curr);
+		asspatients(curr);
+		curr ++;
+	}
+}
 void schedular::updocst(int curr) {
 	for (int i = 0; i < doclist.size(); i++) {
 		doctor* newdoc = doclist.getAt(i);

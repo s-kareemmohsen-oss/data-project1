@@ -12,4 +12,5 @@ public:
 	void updocst(int curr);
 	void asspatients(int curr);
 	void assignPatientToDoctor(Patient* p, doctor* d, int curr);
+	void sim();
 };
