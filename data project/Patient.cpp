@@ -16,6 +16,7 @@ int Patient::getFinishTime()const { return finishtime; }
 bool Patient::isAutoEsc()const{ return autoesc; }
 void Patient::setType(char other) { type = other; }
 void Patient::setWaitingTime(int other) { waitingtime = other; }
+void Patient::setVisitTime(int vt){visittime = vt;}
 void Patient::setFinshTime(int fh) { finishtime = fh; }
 void Patient::setAutoEsc(bool other) { autoesc = other; }
 double Patient::getPriority() const{

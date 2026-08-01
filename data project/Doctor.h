@@ -1,3 +1,4 @@
+#include "Patient.h"
 enum docstate {
 	idle,
 	busy,
@@ -5,50 +6,49 @@ enum docstate {
 	shift_not_started 
 };
 class doctor {
-	docstate current_state;
-	int treated_patients;
-	int end_treatment;
-	int endbreak;
-	char docspec;
-public:
-	int shst_t;
-	int breakafter;
-	int break_duration;
-	docstate get_cs() {
-		return current_state;
-	}
-	void set_cs(docstate a) {
-		current_state = a;
-	}
-	void set_docspec(char a) { docspec = a; }
+private:
+    int id;
+    int branch;
+    docstate current_state;
+    int treated_patients;
+    int end_treatment;
+    int endbreak;
+    char docspec;
+    Patient* current_patient;
 
-	void set_treated(int a) {
-		treated_patients = a;
-	}
-	void set_endt(int a) {
-		end_treatment = a;
-	}
-	void set_eb(int a) {
-		endbreak = a;
-	}
-	void set_shst_t(int t) {
-		shst_t = t;
-	}
-	int get_tp() {
-		return treated_patients;
-	}
-	int get_et() {
-		return end_treatment;
-	}
-	int get_eb() {
-		return endbreak;
-	}
-	int get_shst_t() {
-		return shst_t;
-	}
-	char get_docspec() {
-		return docspec;
-	}
-	
+public:
+    int shst_t;
+    int breakafter;
+    int break_duration;
+
+    
+    doctor();
+    doctor(int d_id, int d_branch, char spec, int shift_start, int break_after, int break_dur);
+
+    
+    int get_id() const;
+    int get_branch() const;
+    docstate get_cs() const;
+    int get_tp() const;
+    int get_et() const;
+    int get_eb() const;
+    int get_shst_t() const;
+    char get_docspec() const;
+    Patient* get_current_patient() const;
+
+    
+    void set_id(int d_id);
+    void set_branch(int d_branch);
+    void set_cs(docstate a);
+    void set_docspec(char a);
+    void set_treated(int a);
+    void set_endt(int a);
+    void set_eb(int a);
+    void set_shst_t(int t);
+
+    
+    bool is_available(int currentTime);
+    void update_state(int currentTime);
+    void assign_patient(Patient* p, int currentTime, int setup_dur, int wrap_dur, int per_test_dur);
+    void print(int currentTime) const;
 };
-enum patient

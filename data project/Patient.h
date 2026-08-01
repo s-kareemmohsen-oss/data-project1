@@ -26,6 +26,7 @@ public:
 	void setWaitingTime(int other);
 	void setFinshTime(int fh);
 	void setAutoEsc(bool other);
+	void setVisitTime(int vt);
 	double getPriority()const;
 	bool operator>(const Patient& other)const;
 	bool operator<(const Patient& other)const;
