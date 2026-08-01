@@ -7,6 +7,22 @@ private:
     Node<T>* head;
     int queueSize;
 
+    template <typename U>
+    bool higherPriorityImpl(const U& a, const U& b) const {
+        return a > b;
+    }
+
+    template <typename U>
+    bool higherPriorityImpl(U* a, U* b) const {
+        if (a == nullptr) return false;
+        if (b == nullptr) return true;
+        return *a > *b;
+    }
+
+    bool higherPriority(const T& a, const T& b) const {
+        return higherPriorityImpl(a, b);
+    }
+
 public:
     PriorityQueue() : head(nullptr), queueSize(0) {}
 
@@ -45,13 +61,13 @@ public:
 
     void push(const T& value) {
         Node<T>* newNode = new Node<T>(value);
-        if (empty() || value > head->getData()) {
+        if (empty() || higherPriority(value, head->getData())) {
             newNode->setNext(head);
             head = newNode;
         }
         else {
             Node<T>* current = head;
-            while (current->getNext() != nullptr && current->getNext()->getData() >= value) {
+            while (current->getNext() != nullptr && !higherPriority(value, current->getNext()->getData())) {
                 current = current->getNext();
             }
             newNode->setNext(current->getNext());
@@ -75,11 +91,11 @@ public:
 
     void print() const {
         Node<T>* current = head;
-        cout << "[ ";
+        std::cout << "[ ";
         while (current != nullptr) {
             std::cout << current->getData() << (current->getNext() ? " -> " : "");
             current = current->getNext();
         }
-        cout << " ] (Size: " << queueSize << ")\n";
+        std::cout << " ] (Size: " << queueSize << ")\n";
     }
 };
