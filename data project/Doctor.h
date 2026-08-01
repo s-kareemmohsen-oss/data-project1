@@ -9,6 +9,7 @@ class doctor {
 	int treated_patients;
 	int end_treatment;
 	int endbreak;
+	char docspec;
 public:
 	int shst_t;
 	int breakafter;
@@ -19,6 +20,8 @@ public:
 	void set_cs(docstate a) {
 		current_state = a;
 	}
+	void set_docspec(char a) { docspec = a; }
+
 	void set_treated(int a) {
 		treated_patients = a;
 	}
@@ -42,6 +45,9 @@ public:
 	}
 	int get_shst_t() {
 		return shst_t;
+	}
+	char get_docspec() {
+		return docspec;
 	}
 	
 };
