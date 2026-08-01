@@ -28,6 +28,8 @@ void schedular::updocst(int curr) {
 			}
 		}
 	}
+//ناقص بس 					assignPatientToDoctor(p, newdoc, curr);
+//هعملها بكرا عشان لسه مش فاهم اوي هعملها ازاي
 void schedular::asspatients(int curr){
 	for (int i = 0; i < doclist.size(); i++) {
 		doctor* newdoc = doclist.getAt(i);
