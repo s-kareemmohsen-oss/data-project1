@@ -8,20 +8,18 @@ private:
     int queueSize;
 
     template <typename U>
-    bool higherPriorityImpl(const U& a, const U& b) const {
+    bool higherPriority(const U& a, const U& b) const {
         return a > b;
     }
 
     template <typename U>
-    bool higherPriorityImpl(U* a, U* b) const {
+    bool higherPriority(U* a, U* b) const {
         if (a == nullptr) return false;
         if (b == nullptr) return true;
         return *a > *b;
     }
 
-    bool higherPriority(const T& a, const T& b) const {
-        return higherPriorityImpl(a, b);
-    }
+
 
 public:
     PriorityQueue() : head(nullptr), queueSize(0) {}
