@@ -1,4 +1,4 @@
-
+#pragma once
 class Patient {
 private:
 	int id;
@@ -21,7 +21,7 @@ public:
 	int getWaitingTime()const;
 	int getVisitTime()const;
 	int getFinishTime()const;
-	bool isAutoEsc()const{}
+	bool isAutoEsc()const;
 	void setType(char other);
 	void setWaitingTime(int other);
 	void setFinshTime(int fh);

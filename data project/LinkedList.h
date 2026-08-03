@@ -1,6 +1,9 @@
+#pragma once
 #include "Node.h"
 #include <iostream>
+
 using namespace std;
+
 template <typename T>
 class LinkedList {
 private:
@@ -66,7 +69,7 @@ public:
         return current->getData();
     }
 
-    void pushfront(const T& value) {
+    void push_front(const T& value) {
         Node<T>* newNode = new Node<T>(value, head);
         head = newNode;
         if (tail == nullptr) {
@@ -75,7 +78,7 @@ public:
         listSize++;
     }
 
-    void pushback(const T& value) {
+    void push_back(const T& value) {
         Node<T>* newNode = new Node<T>(value);
         if (empty()) {
             head = tail = newNode;
@@ -109,7 +112,7 @@ public:
         listSize++;
     }
 
-    void popfront() {
+    void pop_front() {
         if (empty()) return;
 
         Node<T>* temp = head;
@@ -122,7 +125,7 @@ public:
         }
     }
 
-    void popback() {
+    void pop_back() {
         if (empty()) return;
 
         if (head == tail) {

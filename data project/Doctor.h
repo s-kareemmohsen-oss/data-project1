@@ -1,4 +1,5 @@
 #include "Patient.h"
+#pragma once
 enum docstate {
 	idle,
 	busy,

@@ -1,4 +1,5 @@
 template<typename T>
+#pragma once
 class Node {
 private:
 	T data;
