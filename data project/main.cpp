@@ -1,13 +1,21 @@
 #include <iostream>
-// ضيف هنا ملفات الـ Headers الأساسية بتاعتك
-// #include "SimulationEngine.h"
+#include "SimulationEngine.h"
+#include "FileManager.h"
 
 using namespace std;
 
-int main() {
-    cout << "Simulation Started!" << endl;
+int main()
+{
+	SimulationEngine simulation;
+	FileManager fileManager;
 
-    // هنا هتعمل object من الـ SimulationEngine أو הـ Scheduler وتبدأ المحاكاة
+	if (!fileManager.LoadInput("input.txt", &simulation))
+	{
+		cout << "Failed to load input file." << endl;
+		return -1;
+	}
 
-    return 0;
+	cout << "Input file loaded successfully." << endl;
+
+	return 0;
 }
