@@ -7,7 +7,7 @@
 class schedular {
 	LinkedList<doctor*> doclist;
 public:
-	PriorityQueue<Patient*> emergencyQueue; // طابور الطوارئ
+	PriorityQueue<Patient*> emergencyQueue; 
 	PriorityQueue<Patient*> regularQueue;
 	void updocst(int curr);
 	void asspatients(int curr);
