@@ -97,6 +97,7 @@ void doctor::assign_patient(Patient* p, int currentTime, int setup_dur, int wrap
 
     end_treatment = currentTime + visit_time;
     current_state = busy;
+    p->setFinshTime(end_treatment);
 }
 
 void doctor::print(int currentTime) const {
