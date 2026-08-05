@@ -9,16 +9,20 @@ CheckInEvent::CheckInEvent(int time, int id, char pType, int b, int tests)
 
 void CheckInEvent::Execute(SimulationEngine* pApp) {
     Patient* newPatient = new Patient(patientID, type, eventTime, branch, numTests);
+    pApp->getScheduler()->addPatient(newPatient);
 }
 
 LeaveEvent::LeaveEvent(int time, int id) : Event(time, id) {
+
 }
 
 void LeaveEvent::Execute(SimulationEngine* pApp) {
+    pApp->getScheduler()->removePatient(patientID);
 }
 
 UrgentEvent::UrgentEvent(int time, int id) : Event(time, id) {
 }
 
 void UrgentEvent::Execute(SimulationEngine* pApp) {
+    pApp->getScheduler()->promoteToUrgent(patientID);
 }

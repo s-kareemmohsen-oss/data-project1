@@ -47,56 +47,60 @@ bool doctor::is_available(int currentTime) {
     return (current_state == idle);
 }
 
-void doctor::update_state(int currentTime) {
-    
-    if (current_state == shift_not_started) {
-        if (currentTime >= shst_t) {
+void doctor::update_state(int currentTime)
+{
+    if (current_state == shift_not_started)
+    {
+        if (currentTime >= shst_t)
             current_state = idle;
-        }
+
         return;
     }
 
-    
-    if (current_state == busy) {
-        if (currentTime >= end_treatment) {
-            current_patient = nullptr; 
-
-            
-            if (breakafter > 0 && treated_patients >= breakafter) {
+    if (current_state == busy)
+    {
+        if (currentTime >= end_treatment)
+        {
+            if (breakafter > 0 && treated_patients >= breakafter)
+            {
                 current_state = onbreak;
                 endbreak = currentTime + break_duration;
-                treated_patients = 0; 
-            } else {
+                treated_patients = 0;
+            }
+            else
+            {
                 current_state = idle;
             }
         }
+
+        return;
     }
 
-  
-    if (current_state == onbreak) {
-        if (currentTime >= endbreak) {
+    if (current_state == onbreak)
+    {
+        if (currentTime >= endbreak)
             current_state = idle;
-        }
     }
 }
 
-void doctor::assign_patient(Patient* p, int currentTime, int setup_dur, int wrap_dur, int per_test_dur) {
-    if (p == nullptr) return;
+void doctor::assign_patient(Patient* p, int currentTime, int setup_dur, int wrap_dur, int per_test_dur)
+{
+    if (!p)
+        return;
 
     current_patient = p;
+
     treated_patients++;
 
+    int visitTime = setup_dur + wrap_dur + p->getNumTest() * per_test_dur;
 
-    int visit_time = setup_dur + wrap_dur + (p->getNumTest() * per_test_dur);
-    
-    
-    int waiting_time = currentTime - p->getCheckInTime();
+    p->setWaitingTime(currentTime - p->getCheckInTime());
+    p->setVisitTime(visitTime);
 
-    p->setWaitingTime(waiting_time);
-    p->setVisitTime(visit_time);
+    end_treatment = currentTime + visitTime;
 
-    end_treatment = currentTime + visit_time;
     current_state = busy;
+
     p->setFinshTime(end_treatment);
 }
 
@@ -117,4 +121,11 @@ void doctor::print(int currentTime) const {
             std::cout << "on break until t=" << endbreak;
             break;
     }
+ 
+}
+Patient* doctor::release_patient()
+{
+    Patient* p = current_patient;
+    current_patient = nullptr;
+    return p;
 }

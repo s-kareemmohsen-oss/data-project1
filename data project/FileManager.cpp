@@ -1,6 +1,8 @@
 #include "FileManager.h"
 #include "SimulationEngine.h"
 #include "Event.h"
+#include "Scheduler.h"
+#include "Doctor.h"
 #include <fstream>
 #include <iostream>
 
@@ -47,7 +49,7 @@ bool FileManager::LoadInput(string fileName, SimulationEngine* sim)
 
 	for (int i = 0; i < B; i++)
 		totalDoctors += doctorsCount[i];
-
+	int docID = 1;
 	for (int i = 0; i < totalDoctors; i++)
 	{
 		int branch;
@@ -61,14 +63,15 @@ bool FileManager::LoadInput(string fileName, SimulationEngine* sim)
 			>> shift
 			>> breakAfter
 			>> breakDuration;
-
+		doctor* newDoc = new doctor(docID++, branch, spec, shift, breakAfter, breakDuration);
+		sim->getScheduler()->addDoctor(newDoc);
 	}
 
 	int autoEscalation;
 
 	input >> autoEscalation;
 
-
+	sim->getScheduler()->setConfig(B, SU, WU, PS, PJ, autoEscalation);
 	int events;
 
 	input >> events;
@@ -144,10 +147,36 @@ bool FileManager::LoadInput(string fileName, SimulationEngine* sim)
 bool FileManager::SaveOutput(string fileName, SimulationEngine* sim)
 {
 	ofstream output(fileName);
-
 	if (!output.is_open())
 		return false;
+	output << "FT\tID\tCT\tWT\tVT\n";
+	Queue<Patient*>& donePatients = sim->getScheduler()->doneList;
 
+	int totalWaitTime = 0;
+	int totalVisitTime = 0;
+	int totalPatients = 0;
+	while (!donePatients.empty()) {
+		Patient* p = donePatients.front();
+		donePatients.dequeue();
+
+		output << p->getFinishTime() << "\t"
+			<< p->getId() << "\t"
+			<< p->getCheckInTime() << "\t"
+			<< p->getWaitingTime() << "\t"
+			<< p->getVisitTime() << "\n";
+
+		totalWaitTime += p->getWaitingTime();
+		totalVisitTime += p->getVisitTime();
+		totalPatients++;
+
+		delete p;
+	}
+	if (totalPatients > 0) {
+		output << "\n-----------------------------------\n";
+		output << "Total Patients: " << totalPatients << "\n";
+		output << "Avg Wait Time: " << (double)totalWaitTime / totalPatients << "\n";
+		output << "Avg Visit Time: " << (double)totalVisitTime / totalPatients << "\n";
+	}
 	
 
 	output.close();

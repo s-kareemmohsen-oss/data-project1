@@ -31,7 +31,7 @@ schedular* SimulationEngine::getScheduler() const {
 void SimulationEngine::RunSimulation() {
     cout << "Simulation Started...\n";
 
-    while (!eventQueue.empty() ) {
+    while (!eventQueue.empty() || !clinicScheduler->isSimulationDone()) {
 
         while (!eventQueue.empty() && eventQueue.front()->getEventTime() == currentTimestamp) {
             Event* currentEvent = eventQueue.front();
@@ -40,6 +40,9 @@ void SimulationEngine::RunSimulation() {
             currentEvent->Execute(this);
             delete currentEvent; 
         }
+        clinicScheduler->autoEscalatePatients(currentTimestamp); 
+        clinicScheduler->updocst(currentTimestamp);              
+        clinicScheduler->asspatients(currentTimestamp);
 
        
         currentTimestamp++;

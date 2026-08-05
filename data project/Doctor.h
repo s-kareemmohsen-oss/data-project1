@@ -46,8 +46,8 @@ public:
     void set_endt(int a);
     void set_eb(int a);
     void set_shst_t(int t);
+    Patient* release_patient();
 
-    
     bool is_available(int currentTime);
     void update_state(int currentTime);
     void assign_patient(Patient* p, int currentTime, int setup_dur, int wrap_dur, int per_test_dur);

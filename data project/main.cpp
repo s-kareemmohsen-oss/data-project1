@@ -17,6 +17,7 @@ int main()
 
 	cout << "Input file loaded successfully." << endl;
 	simulation.RunSimulation();
-
+	fileManager.SaveOutput("sample1.txt", &simulation);
+	cout << "Output file generated successfully." << endl;
 	return 0;
 }
