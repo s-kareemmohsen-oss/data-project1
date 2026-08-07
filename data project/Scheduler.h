@@ -29,4 +29,5 @@ public:
 	void promoteToUrgent(int id);
 	bool removePatient(int id);
 	bool isSimulationDone();
+	void printSnapshot(int currentTime);
 };
