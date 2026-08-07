@@ -29,6 +29,14 @@ schedular* SimulationEngine::getScheduler() const {
 }
 
 void SimulationEngine::RunSimulation() {
+    int mode;
+    cout << "Select Run Mode:\n";
+    cout << "1. Silent Mode\n";
+    cout << "2. Interactive Mode\n";
+    cout << "Enter 1 or 2: ";
+    cin >> mode;
+    cin.ignore();
+
     cout << "Simulation Started...\n";
 
     while (!eventQueue.empty() || !clinicScheduler->isSimulationDone()) {
@@ -36,15 +44,20 @@ void SimulationEngine::RunSimulation() {
         while (!eventQueue.empty() && eventQueue.front()->getEventTime() == currentTimestamp) {
             Event* currentEvent = eventQueue.front();
             eventQueue.dequeue();
-
             currentEvent->Execute(this);
-            delete currentEvent; 
+            delete currentEvent;
         }
-        clinicScheduler->autoEscalatePatients(currentTimestamp); 
-        clinicScheduler->updocst(currentTimestamp);              
+
+        clinicScheduler->autoEscalatePatients(currentTimestamp);
+        clinicScheduler->updocst(currentTimestamp);
         clinicScheduler->asspatients(currentTimestamp);
 
-       
+        if (mode == 2) {
+            clinicScheduler->printSnapshot(currentTimestamp);
+            cout << "-- press Enter to continue --";
+            cin.get();
+        }
+
         currentTimestamp++;
     }
 
