@@ -1,5 +1,6 @@
 #include"Scheduler.h"
 #include"Doctor.h"
+#include <iostream>
 void schedular::setConfig(int b, int su, int wu, int ps, int pj, int autoe) {
 	numBranches = b;
 	SU = su;
@@ -170,4 +171,72 @@ void schedular::assignPatientToDoctor(Patient* p, doctor* newdoc, int curr) {
 	if (p == nullptr || newdoc == nullptr) return;
 	int per_test_dur = (newdoc->get_docspec() == 'S') ? PS : PJ;
 	newdoc->assign_patient(p, curr, SU, WU, per_test_dur);
+}
+void schedular::printSnapshot(int currentTime) {
+	cout << "\n======== Timestep " << currentTime << " ========\n";
+
+	for (int b = 1; b <= numBranches; b++) {
+		cout << "Branch " << b << ":\t";
+		for (int i = 0; i < doclist.size(); i++) {
+			if (doclist.getAt(i)->get_branch() == b) {
+				doclist.getAt(i)->print(currentTime);
+				cout << "\t";
+			}
+		}
+		cout << "\n";
+	}
+
+	cout << "Waiting Emergency: ";
+	if (emergencyQueue.empty()) {
+		cout << "(none)\n";
+	}
+	else {
+		PriorityQueue<Patient*> tempE;
+		cout << "[";
+		bool first = true;
+		while (!emergencyQueue.empty()) {
+			Patient* p = emergencyQueue.top();
+			emergencyQueue.pop();
+			if (!first) cout << ", ";
+			cout << p->getId();
+			first = false;
+			tempE.push(p);
+		}
+		cout << "]\n";
+		while (!tempE.empty()) { emergencyQueue.push(tempE.top()); tempE.pop(); }
+	}
+
+	cout << "Waiting Regular:   ";
+	if (regularQueue.empty()) {
+		cout << "(none)\n";
+	}
+	else {
+		PriorityQueue<Patient*> tempR;
+		cout << "[";
+		bool first = true;
+		while (!regularQueue.empty()) {
+			Patient* p = regularQueue.top();
+			regularQueue.pop();
+			if (!first) cout << ", ";
+			cout << p->getId();
+			first = false;
+			tempR.push(p);
+		}
+		cout << "]\n";
+		while (!tempR.empty()) { regularQueue.push(tempR.top()); tempR.pop(); }
+	}
+
+	cout << "In-Visit:          ";
+	bool anyInVisit = false;
+	for (int i = 0; i < doclist.size(); i++) {
+		doctor* d = doclist.getAt(i);
+		if (d->get_cs() == busy && d->get_current_patient() != nullptr) {
+			cout << "[" << d->get_current_patient()->getId() << " -> Dr " << d->get_docspec() << d->get_id() << "] ";
+			anyInVisit = true;
+		}
+	}
+	if (!anyInVisit) cout << "(none)";
+	cout << "\n";
+
+	cout << "Done so far:       " << doneList.size() << "\n";
 }
