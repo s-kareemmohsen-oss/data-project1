@@ -29,5 +29,7 @@ public:
 	void promoteToUrgent(int id);
 	bool removePatient(int id);
 	bool isSimulationDone();
+	int getDoctorCount() const;
+	doctor* getDoctor(int index) const;
 	void printSnapshot(int currentTime);
 };

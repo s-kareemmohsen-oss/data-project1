@@ -15,6 +15,10 @@ public:
 
     void addEvent(Event* pEvent);
     schedular* getScheduler() const;
+    void RunSilent();
+    void RunInteractive();
+    bool Step();
 
+    int getCurrentTimestamp() const;
     void RunSimulation();
 };

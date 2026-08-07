@@ -63,3 +63,59 @@ void SimulationEngine::RunSimulation() {
 
     cout << "Simulation Ended at timestamp: " << currentTimestamp - 1 << "\n";
 }
+bool SimulationEngine::Step()
+{
+    if (eventQueue.empty() && clinicScheduler->isSimulationDone())
+        return false;
+
+    while (!eventQueue.empty() &&
+        eventQueue.front()->getEventTime() == currentTimestamp)
+    {
+        Event* currentEvent = eventQueue.front();
+        eventQueue.dequeue();
+
+        currentEvent->Execute(this);
+
+        delete currentEvent;
+    }
+
+    clinicScheduler->autoEscalatePatients(currentTimestamp);
+    clinicScheduler->updocst(currentTimestamp);
+    clinicScheduler->asspatients(currentTimestamp);
+
+    currentTimestamp++;
+
+    return true;
+}
+
+void SimulationEngine::RunSilent()
+{
+    cout << "Simulation Started...\n";
+
+    while (Step())
+    {
+    }
+
+    cout << "Simulation Ended at timestamp: "
+        << currentTimestamp - 1 << "\n";
+}
+
+void SimulationEngine::RunInteractive()
+{
+    cout << "Simulation Started...\n";
+
+    while (Step())
+    {
+        clinicScheduler->printSnapshot(currentTimestamp - 1);
+
+        cout << "-- press Enter to continue --";
+        cin.get();
+    }
+
+    cout << "Simulation Ended at timestamp: "
+        << currentTimestamp - 1 << "\n";
+}
+int SimulationEngine::getCurrentTimestamp() const
+{
+    return currentTimestamp;
+}

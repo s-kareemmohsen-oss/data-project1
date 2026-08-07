@@ -240,3 +240,12 @@ void schedular::printSnapshot(int currentTime) {
 
 	cout << "Done so far:       " << doneList.size() << "\n";
 }
+int schedular::getDoctorCount() const
+{
+	return doclist.size();
+}
+
+doctor* schedular::getDoctor(int index) const
+{
+	return doclist.getAt(index);
+}
